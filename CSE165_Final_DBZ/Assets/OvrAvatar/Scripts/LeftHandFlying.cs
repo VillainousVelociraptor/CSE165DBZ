@@ -18,11 +18,11 @@ public class LeftHandFlying : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (OVRInput.Get(OVRInput.Touch.Two)){
+        if (OVRInput.GetDown(OVRInput.Button.Two)){
             //Pressing the Y button makes flying false
             flyEnabled = false; //Pressing the Y button makes flying false
         }
-        else if (OVRInput.Get(OVRInput.Touch.One))
+        else if (OVRInput.GetDown(OVRInput.Button.One))
         {
             //Pressing the X button makes flying true
             flyEnabled = true;
@@ -38,5 +38,7 @@ public class LeftHandFlying : MonoBehaviour {
         {
             cloud.GetComponent<Renderer>().enabled = false;
         }
+
+
 	}
 }
