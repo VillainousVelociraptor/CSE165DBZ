@@ -11,55 +11,75 @@ public class VirtualHand : MonoBehaviour
     public GameObject hand;
     public OVRInput.Controller controller;
 
-    private GameObject grabbedObject = null;
-    private Transform objectOrgParent = null;
+    public static bool menuEnabled;
+    public GameObject menu;
+
+
 
     private void Start()
     {
+        //menu.GetComponent<Renderer>().enabled = false;
+        menu.SetActive(false);
         Debug.Log("Inside of VirtualHand Start method");
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerExit(Collider collision)
     {
-        
-        if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
+        if(collision.gameObject.tag == "GrabButton")
         {
-            Debug.Log("Inside of OnCollisionStay");
-            if (collision.gameObject.tag == "Bad Guy")
+            Debug.Log("Triggered the grab button");
+            GrabScript.grabEnabled = true;
+            //FireballScript.fireEnabled = false;
+        }
+        else if (collision.gameObject.tag == "FireballButton")
+        {
+            Debug.Log("Triggered the fireball button");
+            //FireballScript.fireEnabled = true;
+            //GrabScript.grabEnabled = false;
+        }
+        else if (collision.gameObject.tag == "FlyButton")
+        {
+            Debug.Log("Triggered the fly button");
+            if (!LeftHandFlying.flyEnabled)
             {
-                //The object that was collided with becomes the grabbed object
-                grabbedObject = collision.gameObject;
-                Debug.Log("Parent of grabbed object before grab: " + objectOrgParent);
-
-                //Makes the grabbed object kinematic
-                grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
-
-                objectOrgParent = grabbedObject.transform.parent;
-                Debug.Log("Parent of grabbed object after grab: " + grabbedObject.name);
-
-                //Makes the hand the parent of the grabbed object
-                //grabbedObject.transform.parent = hand.transform;
-                grabbedObject.transform.SetParent(hand.transform);
+                //Turns on flying if it was off
+                LeftHandFlying.flyEnabled = true;
             }
-
+            else
+            {
+                //Turns off flying if it was on
+                LeftHandFlying.flyEnabled = false;
+            }          
+        }
+        else if(collision.gameObject.tag == "RadarButton")
+        {
+            Debug.Log("Triggered the radar button");
+            //RadarScript.radarEnabled = true;
         }
     }
 
     private void Update()
     {
-
-        if (grabbedObject != null)
+        //If X button is toggled...
+        if (OVRInput.GetDown(OVRInput.RawButton.X))
         {
-            if (!OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
+            Debug.Log("X button was pressed");
+            if (!menuEnabled)
             {
-                //Debug.Log(grabbedObject.name);
-                grabbedObject.transform.SetParent(null);
-                //grabbedObject.transform.parent = nulll;
-                grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
-
-                grabbedObject = null;
-
+                //Displays menu if it was previously invisible 
+                menu.SetActive(true);
+                menuEnabled = true;
+                //menu.GetComponent<Renderer>().enabled = true;
+            }
+            else
+            {
+                //Hides menu if it was previously visible 
+                menu.SetActive(false);
+                menuEnabled = false;
+                //menu.GetComponent<Renderer>().enabled = false;
             }
         }
     }
+
+
 }

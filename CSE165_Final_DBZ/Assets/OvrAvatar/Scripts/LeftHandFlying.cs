@@ -9,15 +9,10 @@ public class LeftHandFlying : MonoBehaviour {
     public static bool flyEnabled; //is flying enabled 
     public float speed = 3.0f; //flying speed
     public GameObject cloud;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
-
+        /*
         if (OVRInput.GetDown(OVRInput.Button.Two)){
             //Pressing the Y button makes flying false
             flyEnabled = false; //Pressing the Y button makes flying false
@@ -27,18 +22,17 @@ public class LeftHandFlying : MonoBehaviour {
             //Pressing the X button makes flying true
             flyEnabled = true;
         }
-
+        */
         if (flyEnabled)
         {
             //The character flyes in the direction of the left hand
             transform.position += hand.transform.forward * Time.deltaTime * speed;
-            cloud.GetComponent<Renderer>().enabled = true;
+            cloud.GetComponent<Renderer>().enabled = true; //Cloud appears when flying
         }
         else
         {
+            //Hides cloud if flying is disabled
             cloud.GetComponent<Renderer>().enabled = false;
         }
-
-
 	}
 }
